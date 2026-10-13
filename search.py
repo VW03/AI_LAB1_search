@@ -129,11 +129,32 @@ def breadthFirstSearch(problem):
 
     return []
 
+
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    prioQueueUCS = util.PriorityQueue() # Expands the search tree following the lowest path cost → Priority Queue
-    util.raiseNotDefined()
+
+    prioQueueUCS = util.PriorityQueue() # Priority Queue omdat UCS de knoop met de laagste totale padkosten als eerste uitbreidt
+    prioQueueUCS.push((problem.getStartState(), [], 0), 0)
+    visited = set()
+
+    while not prioQueueUCS.isEmpty():
+        state, path, cost = prioQueueUCS.pop()  # Haal de staat met de laagste kosten op
+
+        if problem.isGoalState(state):  # Controleer of we het doel hebben bereikt
+            return path
+
+        if state not in visited:
+            visited.add(state)
+
+            # problem.getSuccessors geeft een lijst van (successor, action, stepCost) terug
+            for successor, action, stepCost in problem.getSuccessors(state):
+                if successor not in visited:
+                    newPath = path + [action]
+                    newCost = cost + stepCost
+                    prioQueueUCS.push((successor, newPath, newCost), newCost)
+
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -142,11 +163,38 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
+
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    prioQueueSS = util.PriorityQueue() # Expands the search tree following the lowest value of f(n) → Priority queue
-    util.raiseNotDefined()
+
+    prioQueueAStar = util.PriorityQueue() # Priority Queue omdat A* zoekt op basis van de gecombineerde kosten f(n) = g(n) + h(n)
+    startState = problem.getStartState()
+    startHeuristic = heuristic(startState, problem)
+    prioQueueAStar.push((startState, [], 0), startHeuristic)
+    visited = set()  # Set om bij te houden welke staten al definitief zijn verwerkt
+
+    while not prioQueueAStar.isEmpty():
+        state, path, cost = prioQueueAStar.pop()  # Haal de knoop op met de laagste f(n) kosten
+
+        if problem.isGoalState(state):  # Controleer of we het doel hebben bereikt
+            return path
+
+        if state not in visited:
+            visited.add(state)
+
+            # problem.getSuccessors geeft (successor, action, stepCost) terug
+            for successor, action, stepCost in problem.getSuccessors(state):
+                if successor not in visited:
+                    newPath = path + [action]
+                    newCost = cost + stepCost
+
+                    # De prioriteit voor A* is de werkelijke kosten plus de heuristische schatting
+                    heuristicCost = heuristic(successor, problem)
+                    totalPriority = newCost + heuristicCost
+                    prioQueueAStar.push((successor, newPath, newCost), totalPriority)
+
+    return []
 
 
 # Abbreviations
