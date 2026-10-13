@@ -132,6 +132,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    prioQueueUCS = util.PriorityQueue() # Expands the search tree following the lowest path cost → Priority Queue
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -144,6 +145,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    prioQueueSS = util.PriorityQueue() # Expands the search tree following the lowest value of f(n) → Priority queue
     util.raiseNotDefined()
 
 
