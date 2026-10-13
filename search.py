@@ -87,6 +87,23 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    # Stack omdat Expands the search tree following the deepest node → LIFO queue
+    stackDFS = util.Stack()
+    stackDFS.push(problem.getStartState())
+    for i in range(10):
+        i+=1
+        for node in problem.getSuccessors(problem.getStartState()):
+            stackDFS.push(node) # push 1e
+            #break
+        print("a:", stackDFS.list)
+         # pop laatste
+        print("b:", stackDFS.pop()[1])
+        print("c:", stackDFS.list)
+    print("Start:", problem.getSuccessors((4, 5)))
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
