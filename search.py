@@ -112,7 +112,22 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queueBFS = util.Queue() # queue omdat Expands the search tree following the shallowest node → FIFO queue
+    queueBFS.push((problem.getStartState(), []))
+    visited = set()  # set omdat O(1), [] zou O(n) zijn om iets te vinden
+
+    while not queueBFS.isEmpty():
+        state, path = queueBFS.pop()  # state voor huidige op te halen en path voor pacman te bewegen
+
+        if problem.isGoalState(state):  # voor beweging pacman te returnen
+            return path
+
+        for node in problem.getSuccessors(state):
+            if node[0] not in visited:
+                visited.add(state) # niet meer zelfde state meerdere keer bij verschillende paths
+                queueBFS.push((node[0], path + [node[1]]))
+
+    return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
