@@ -143,13 +143,15 @@ def uniformCostSearch(problem):
         if problem.isGoalState(state):  # Controleer of we het doel hebben bereikt
             return path
 
-        # problem.getSuccessors geeft een lijst van (successor, action, stepCost) terug
-        for successor, action, stepCost in problem.getSuccessors(state):
-            if successor not in visited:
-                visited.add(successor)
-                newPath = path + [action]
-                newCost = cost + stepCost
-                prioQueueUCS.push((successor, newPath, newCost), newCost)
+        if state not in visited:
+            visited.add(state)
+
+            # problem.getSuccessors geeft een lijst van (successor, action, stepCost) terug
+            for successor, action, stepCost in problem.getSuccessors(state):
+                if successor not in visited:
+                    newPath = path + [action]
+                    newCost = cost + stepCost
+                    prioQueueUCS.push((successor, newPath, newCost), newCost)
 
     return []
 
@@ -177,17 +179,19 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         if problem.isGoalState(state):  # Controleer of we het doel hebben bereikt
             return path
 
-        # problem.getSuccessors geeft (successor, action, stepCost) terug
-        for successor, action, stepCost in problem.getSuccessors(state):
-            if successor not in visited:
-                visited.add(successor)
-                newPath = path + [action]
-                newCost = cost + stepCost
+        if state not in visited:
+            visited.add(state)
 
-                # De prioriteit voor A* is de werkelijke kosten plus de heuristische schatting
-                heuristicCost = heuristic(successor, problem)
-                totalPriority = newCost + heuristicCost
-                prioQueueAStar.push((successor, newPath, newCost), totalPriority)
+            # problem.getSuccessors geeft (successor, action, stepCost) terug
+            for successor, action, stepCost in problem.getSuccessors(state):
+                if successor not in visited:
+                    newPath = path + [action]
+                    newCost = cost + stepCost
+
+                    # De prioriteit voor A* is de werkelijke kosten plus de heuristische schatting
+                    heuristicCost = heuristic(successor, problem)
+                    totalPriority = newCost + heuristicCost
+                    prioQueueAStar.push((successor, newPath, newCost), totalPriority)
 
     return []
 

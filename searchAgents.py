@@ -518,11 +518,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        # path = []
-        # return path
-
-        problem = AnyFoodSearchProblem(gameState)
-        return search.breadthFirstSearch(problem)
+        return search.breadthFirstSearch(problem) # bfs omdat die de shortest path geeft tot het dichtste food
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
