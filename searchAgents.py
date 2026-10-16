@@ -288,6 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.currentPosition = self.startingPosition
 
     def getStartState(self):
         """
@@ -295,14 +296,19 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        visited = tuple(self.startingPosition == c for c in self.corners)
+        return (self.startingPosition, visited)
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        position, visited = state
+        for visit in visited:
+            if not visit:
+                return False
+        return True
 
     def getSuccessors(self, state):
         """
@@ -316,6 +322,7 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+        position, visited = state
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -325,6 +332,15 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x, y = position
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                newVisited = tuple(
+                    v or ((nextx, nexty) == c) for v, c in zip(visited, self.corners)
+                )
+                successors.append((((nextx, nexty),newVisited), action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

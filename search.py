@@ -101,11 +101,10 @@ def depthFirstSearch(problem):
         if problem.isGoalState(state): # voor beweging pacman te returnen
             return path
 
-        if state not in visited:
-            visited.add(state)
-            for node in problem.getSuccessors(state):
-                if node[0] not in visited:
-                    stackDFS.push((node[0], path + [node[1]]))
+        for node in problem.getSuccessors(state):
+            if node[0] not in visited:
+                visited.add(node[0])
+                stackDFS.push((node[0], path + [node[1]]))
 
     return []
 
@@ -124,7 +123,7 @@ def breadthFirstSearch(problem):
 
         for node in problem.getSuccessors(state):
             if node[0] not in visited:
-                visited.add(state) # niet meer zelfde state meerdere keer bij verschillende paths
+                visited.add(node[0]) # successor toevoegen
                 queueBFS.push((node[0], path + [node[1]]))
 
     return []
