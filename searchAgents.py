@@ -470,7 +470,24 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    # heuristic: aantal steps totdat alle food op is -> tel steps tot verste food (je moet daar toch sowieso naartoe)
+    foodList = foodGrid.asList()
+
+    if not foodList:  # goal state
+        return 0
+
+    if 'distFrom' not in problem.heuristicInfo: # distance opslaan
+        problem.heuristicInfo['distFrom'] = {}
+    distances = problem.heuristicInfo['distFrom']
+
+    best = 0
+    for food in foodList:
+        key = (position, food) # key van de dictionary
+        if key not in distances:
+            distances[key] = mazeDistance(position, food, problem.startingGameState)
+        best = max(best, distances[key])
+
+    return best
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
