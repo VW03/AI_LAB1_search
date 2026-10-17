@@ -376,7 +376,20 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    position, visited = state
+
+    # Filter de hoeken die nog niet bezocht zijn op basis van de boolean-tuple
+    unvisitedCorners = [c for v, c in zip(visited, corners) if not v]
+
+    # Als alle hoeken bezocht zijn, is de afstand 0
+    if not unvisitedCorners:
+        return 0
+
+    # Bereken de Manhattan-afstand naar alle resterende onbezochte hoeken
+    dists = [util.manhattanDistance(position, c) for c in unvisitedCorners]
+
+    # Retourneer de maximale afstand als een toelaatbare (admissible) ondergrens
+    return max(dists)
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
