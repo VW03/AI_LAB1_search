@@ -505,6 +505,8 @@ def foodHeuristic(state, problem):
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
     def registerInitialState(self, state):
+        starttime = time.time() # voor tijd
+        self._expanded = 0 # voor nodes expanded
         self.actions = []
         currentState = state
         while(currentState.getFood().count() > 0):
@@ -517,7 +519,9 @@ class ClosestDotSearchAgent(SearchAgent):
                     raise Exception('findPathToClosestDot returned an illegal move: %s!\n%s' % t)
                 currentState = currentState.generateSuccessor(0, action)
         self.actionIndex = 0
-        print('Path found with cost %d.' % len(self.actions))
+        #print('Path found with cost %d.' % len(self.actions))
+        print('Path found with cost %d in %.1f seconds' % (len(self.actions), time.time() - starttime))
+        print('Search nodes expanded: %d' % self._expanded)
 
     def findPathToClosestDot(self, gameState):
         """
@@ -531,7 +535,11 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        return search.breadthFirstSearch(problem) # bfs omdat die de shortest path geeft tot het dichtste food
+        # return search.breadthFirstSearch(problem) # bfs omdat die de shortest path geeft tot het dichtste food
+        # voor de expanded nodes ook te tellen:
+        path = search.breadthFirstSearch(problem)
+        self._expanded += problem._expanded
+        return path
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
